@@ -1,11 +1,11 @@
 require_relative "art/version"
-require_relative "art/segment"
 require_relative "art/canvas"
 require_relative "art/position"
-# a = Art.new(20,40, File.new("./foo.canvas", "w+"))
-# a = Art.new
-# c = Canvas.new
-# a = Art.new( c )
+# art = Art.new
+# or
+# width = height = 100
+# canvas = Canvas.new( width, height )
+# art = Art.new( canvas )
 class Art
   START_POSITION = Position.new
   DEFAULT_CANVAS = Canvas.new
@@ -92,5 +92,4 @@ class Art
     min_y <= y &&
     y <= max_y
   end
-
 end
