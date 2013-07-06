@@ -10,8 +10,6 @@ class Art
   START_POSITION = Position.new
   DEFAULT_CANVAS = Canvas.new
   DEFAULT_CHAR = '.'
-  FOO = File.new("./foo.canvas", "w+")
-  KEY_METHODS = [ :move_to, :line_to, :draw, :clear, :display ]
 
   attr_reader :current_position
   def initialize(canvas=DEFAULT_CANVAS)
@@ -19,23 +17,21 @@ class Art
     reset_position
   end
 
-  def key_methods
-    KEY_METHODS
-  end
-
+  #FIXME remove this hackery
+  FOO = File.new("./foo.canvas", "w+")
   def display(to=nil)
     to = STDOUT if to.nil?
     to = FOO if to == :foo
+
     canvas.render to
   end
-  # alias_method :display, :unveil
 
   def move_to x, y
     if !within_bounds?( x, y )
       raise RuntimeError, "Out of bounds: #{x.inspect}, #{y.inspect}"
     end
 
-    set_position Position.new( x, y )
+    self.current_position = Position.new( x, y )
   end
 
   def line_to x, y, char=DEFAULT_CHAR
@@ -47,7 +43,7 @@ class Art
     canvas.points_on_line( current_position, destination_position ).each do |at|
       draw( char, at )
     end
-    set_position destination_position
+    self.current_position = destination_position
   end
 
   def draw( pixel, at=current_position )
@@ -60,36 +56,17 @@ class Art
   end
 
   private
+  attr_writer :current_position
   attr_accessor :canvas
 
-  def set_position target
-    @current_position = target
-  end
-
   def reset_position
-    @current_position = START_POSITION
-  end
-
-  def max_y
-    canvas.max_y
-  end
-
-  def max_x
-    canvas.max_x
-  end
-
-  def min_y
-    canvas.min_y
-  end
-
-  def min_x
-    canvas.min_x
+    self.current_position = START_POSITION
   end
 
   def within_bounds?( x, y )
-    min_x <= x &&
-    x <= max_x &&
-    min_y <= y &&
-    y <= max_y
+    canvas.min_x <= x &&
+    x <= canvas.max_x &&
+    canvas.min_y <= y &&
+    y <= canvas.max_y
   end
 end
