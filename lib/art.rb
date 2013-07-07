@@ -46,13 +46,48 @@ class Art
     self.current_position = destination_position
   end
 
+  def write( message=DEFAULT_CHAR, at=current_position )
+    type( message, nil, at )
+  end
+
+  def type( message=DEFAULT_CHAR, pace=0.3, at=current_position )
+   message.split(//).each do |char|
+     at.increment_x
+     last unless within_bounds?( *at.to_a )
+     draw(char, at)
+     display
+     sleep( pace ) if pace
+   end
+  end
+
   def draw( pixel, at=current_position )
     canvas.draw( pixel, at )
+  end
+
+  def live
+    yield(self) if block_given?
   end
 
   def clear
     canvas.clear
     reset_position
+  end
+
+  # height = 4
+  # width = 2
+  # start in lower-left
+  def triangle(start_x, start_y, width, height)
+     move_to(start_x, start_y)
+     line_to(start_x + 2 * width, start_y)
+     line_to(start_x + width, start_y - height)
+     line_to(start_x, start_y)
+  end
+  def square(start_x, start_y, width, height)
+     move_to(start_x, start_y)
+     line_to(start_x + width, start_y)
+     line_to(start_x + width,start_y + height)
+     line_to(start_x,start_y + height)
+     line_to(start_x, start_y)
   end
 
   private
