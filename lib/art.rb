@@ -55,7 +55,7 @@ class Art
   def type( message=DEFAULT_CHAR, pace=0.3, at=current_position )
     pace = Float(pace) if pace
     message.split(//).each do |char|
-      at.increment_x
+      at.increment(1)
       if within_bounds?( *at.to_a )
         draw(char, at)
         if pace

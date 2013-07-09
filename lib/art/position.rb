@@ -9,16 +9,17 @@ class Art
       @y = y
     end
 
+    def hash
+      to_a.hash
+    end
+
     def to_a
       [ x, y ]
     end
 
-    def increment_y
-      self.y = y + 1
-    end
-
-    def increment_x
-      self.x = x + 1
+    def increment x_diff=nil, y_diff=nil
+      self.x = x + x_diff if x_diff
+      self.y = y + y_diff if y_diff
     end
 
     def ==( other )
