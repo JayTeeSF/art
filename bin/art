@@ -3,14 +3,15 @@ require_relative '../lib/art'
 
 require 'optparse'
 
+usage = "Usage: #{$0} [OPTIONS]..."
 options = {}
 opt_parser = OptionParser.new do |opts|
-  opts.banner = "Usage: #{$0} [OPTIONS]..."
+  opts.banner = usage
 
   opts.on( '-t', '--test', 'run example command' ) do
     sample_args = "move_to , 5,5; ride_to, 40"
     options[:commands] = sample_args
-    puts "#{$0} -c #{sample_args}"
+    puts "#{$0} --commands #{sample_args}"
     sleep 3
   end
 
@@ -26,10 +27,15 @@ end
 opt_parser.parse!
 
 # command_array = options[:commands].split(/;/)
-command_string = options[ :commands ]
-command_ary = command_string.split( /\s*;\s*/ )
-command_arguments = command_ary.map{ |command_arg_str| command_arg_str.split(/\s*,\s*/) }
+if command_string = options[ :commands ]
+  command_ary = command_string.split( /\s*;\s*/ )
+  command_arguments = command_ary.map{ |command_arg_str| command_arg_str.split(/\s*,\s*/) }
+end
 
+unless command_arguments
+  warn usage
+  exit
+end
 
 #puts "commands: #{ command_string }..."
 #puts "command_args: #{command_arguments.inspect}"
