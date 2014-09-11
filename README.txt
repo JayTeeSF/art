@@ -1,5 +1,5 @@
 irb -r "./lib/art.rb"
-art = Art.new
+art = Art.new; 0
 art.clear
 
 # draw a (rectangle-looking) square:
