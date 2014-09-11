@@ -17,13 +17,17 @@ class Art
     reset_position
   end
 
-  #FIXME remove this hackery
-  FOO = File.new("./foo.canvas", "w+")
   def display(to=nil)
-    to = STDOUT if to.nil?
-    to = FOO if to == :foo
+    case to
+    when :foo #FIXME: remove this unused proof-of-concept hack
+      output_location = File.new("./foo.canvas", "w+")
+    else
+      to = :stdout
+      output_location = STDOUT
+    end
 
-    canvas.render to
+    canvas.render output_location
+    output_location.close unless :stdout == to
   end
 
   def move_to x, y
@@ -82,7 +86,7 @@ class Art
   def ride_to(destination_x, pace=0.3)
     destination_x = destination_x.to_i
     pace = Float(pace)
-    
+
     current_y = current_position.y
     current_x = current_position.x
     distance = destination_x - current_x
